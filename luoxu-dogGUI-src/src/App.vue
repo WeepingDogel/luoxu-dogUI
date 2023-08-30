@@ -1,6 +1,10 @@
 <script lang="ts">
 export default {
-
+  data() {
+    return {
+      search_content: '',
+    }
+  }
 }
 </script>
 
@@ -9,14 +13,17 @@ export default {
     <div id="titleAndSearchBlock">
       <h1 id="title">LUOXU</h1>
       <p id="description">A web frontend for luoxu, but made by foolish dog. </p>
-      <div id="search-bar">
+      <div class="search-bar">
         <select class="custom-select">
           <option>1</option>
           <option>2</option>
           <option>3</option>
         </select>
-        <input class="input" type="text" />
-        <!-- <input class="input" type="text" /> -->
+        <input class="input" id="contentSearch" type="text" placeholder="Search Content" v-model="search_content" />
+      </div>
+      <div class="search-bar" v-if="search_content != ''">
+        <input class="input" id="userSearch" type="text" placeholder="Search Username" />
+        <button id="searchButton">Search</button>
       </div>
     </div>
   </div>
@@ -62,7 +69,7 @@ export default {
 
 #titleAndSearchBlock {
   width: 100%;
-  height: 350px;
+  height: 500px;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -119,7 +126,7 @@ export default {
     500ms blink steps(2, jump-none) infinite;
 }
 
-#search-bar {
+.search-bar {
   position: relative;
   margin-top: 30px;
   width: 1280px;
@@ -136,11 +143,10 @@ export default {
 
 .input {
   width: 1120px;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
   font-weight: 500;
   font-size: 22px;
   height: 60px;
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px;
   padding-left: 10px;
   border: none;
   outline: none;
@@ -151,6 +157,44 @@ export default {
   border-bottom: 1px solid #212121;
   -webkit-transition: 0.1s;
   transition: 0.5s;
+}
+
+#contentSearch {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+#userSearch {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+#searchButton {
+  width: 160px;
+  height: 60px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  outline: none;
+  border: none;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-weight: 500;
+  font-size: 22px;
+  background-color: #212121;
+  color: #FFFFFF;
+  transition: 200ms ease-in-out background-color, 0.5s ease-in-out color, 1s ease-in-out border-color;
+  cursor: pointer;
+}
+
+#searchButton:hover {
+  color: #212121;
+  background-color: #FFFFFF;
+  border: solid 1px #212121;
+  transition: 200ms ease-in-out background-color, 0.5s ease-in-out color, 1s ease-in-out border-color;
+}
+
+#searchButton:active {
+  filter: brightness(.7);
+  transform: scale(0.95);
 }
 
 .custom-select {
@@ -168,6 +212,7 @@ export default {
   text-align: center;
   font-weight: 500;
   font-size: 14px;
+  cursor: pointer;
 }
 
 
