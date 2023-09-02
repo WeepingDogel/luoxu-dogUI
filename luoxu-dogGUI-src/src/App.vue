@@ -1,8 +1,17 @@
 <script lang="ts">
+import axios from 'axios';
+
 export default {
   data() {
+
     return {
       search_content: '',
+      message_box_display: false,
+    }
+  },
+  methods: {
+    do_search() {
+      this.message_box_display = !this.message_box_display;
     }
   }
 }
@@ -15,15 +24,32 @@ export default {
       <p id="description">A web frontend for luoxu, but made by foolish dog. </p>
       <div class="search-bar">
         <select class="custom-select">
-          <option>1</option>
-          <option>2</option>
-          <option>3</option>
+          <option class="select-options">#group_1</option>
+          <option class="select-options">#group_2</option>
+          <option class="select-options">#group_3</option>
         </select>
         <input class="input" id="contentSearch" type="text" placeholder="Search Content" v-model="search_content" />
       </div>
       <div class="search-bar" v-if="search_content != ''">
         <input class="input" id="userSearch" type="text" placeholder="Search Username" />
-        <button id="searchButton">Search</button>
+        <button id="searchButton" @click="do_search">Search</button>
+      </div>
+    </div>
+    <div id="MessageBoxBlock">
+      <div id="MessageBox" v-if="message_box_display && search_content != ''">
+        <div class="single-message-data">
+          <div class="avatar-area">
+            <img class="avatar" />
+          </div>
+          <div class="text-area">
+            <div class="username-and-datetime-area">
+              <span class="user-name-text">username</span>
+              <span class="date-time-text">datetime</span>
+            </div>
+            <span class="message-text">Message</span>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -60,11 +86,25 @@ export default {
   }
 }
 
+@keyframes BottomFadeIn {
+  from{
+    opacity: 0;
+    bottom: 100%;
+  }
+  to {
+    opacity: 1;
+    bottom: 0%;
+  }
+}
+
 #page {
   width: 100%;
   height: 100vh;
   display: flex;
   background-color: #f1f1f1;
+  flex-direction: column;
+  /* justify-content: center; */
+  /* align-items: center; */
 }
 
 #titleAndSearchBlock {
@@ -143,7 +183,7 @@ export default {
 
 .input {
   width: 1120px;
-  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   font-weight: 500;
   font-size: 22px;
   height: 60px;
@@ -151,6 +191,7 @@ export default {
   border: none;
   outline: none;
   transition: 0.5s;
+  color: #212121;
 }
 
 .input:focus {
@@ -176,7 +217,7 @@ export default {
   border-bottom-right-radius: 10px;
   outline: none;
   border: none;
-  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   font-weight: 500;
   font-size: 22px;
   background-color: #212121;
@@ -203,6 +244,7 @@ export default {
   appearance: none;
   height: 60px;
   width: 160px;
+  color: #212121;
   background: #fff;
   background-size: 10px;
   transition: border-color .1s ease-in-out;
@@ -210,8 +252,9 @@ export default {
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
   text-align: center;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 20px;
   cursor: pointer;
 }
 
@@ -219,5 +262,118 @@ export default {
 /* remove default arrow in IE */
 select::-ms-expand {
   display: none;
+}
+
+.select-options {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  color: #212121;
+}
+
+#MessageBoxBlock {
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+}
+
+#MessageBox {
+  width: 1280px;
+  height: 550px;
+  /* height: auto; */
+  overflow-x: scroll;
+  /* scrollbar-width: none; */
+  background-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.2) 0 2px 1px;
+  animation: 1s FadeIn;
+  border-radius: 10px;
+  margin-bottom: 50px;
+  margin-top: 15px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  border-bottom: solid 3px #e5e5e5;
+}
+
+.single-message-data {
+  width: 100%;
+  height: auto;
+  min-height: 100px;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+  /* background-color: #f3d3d3; */
+  border-bottom: solid #dbdbdb 1px;
+  position: relative;
+  animation: BottomFadeIn 500ms;
+}
+
+.avatar-area {
+  width: 80px;
+  height: 80px;
+  background-color: #F1F1F1;
+  border-radius: 100%;
+  justify-content: center;
+  margin-left: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.avatar {
+  width: 100%;
+  height: auto;
+}
+
+.text-area {
+  width: 1180px;
+  height: auto;
+  min-height: 100px;
+  /* background-color: yellow; */
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+}
+
+.username-and-datetime-area {
+  width: 100%;
+  height: auto;
+  display: flex;
+  margin-top: 10px;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.user-name-text {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  margin-left: 20px;
+  margin-right: auto;
+  line-height: 40px;
+  color: #212121;
+}
+
+.date-time-text {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  margin-right: 20px;
+  margin-left: auto;
+  line-height: 40px;
+  color: #212121;
+}
+
+.message-text {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 30px;
+  color: #212121;
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-bottom: 25px;
 }
 </style>
